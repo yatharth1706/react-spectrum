@@ -20,7 +20,8 @@ import {useSingleSelectListState} from '@react-stately/list';
 
 export interface ComboBoxState<T> extends SelectState<T> {
   inputValue: string,
-  setInputValue: (value: string) => void
+  setInputValue: (value: string) => void,
+  suggestedValue: string
 }
 
 interface ComboBoxStateProps<T> extends ComboBoxProps<T> {
@@ -185,6 +186,27 @@ export function useComboBoxState<T extends object>(props: ComboBoxStateProps<T>)
     }
   };
 
+  let filteredTextValues = useMemo(() => [...filteredCollection].map(item => item.textValue), [filteredCollection]);
+  let suggestedValue = useMemo(() => {
+    let match;
+
+    if (inputValue.length > 0) {
+      // Should the suggestion be case sensitive?
+      let sliceLen = inputValue.length;
+
+      for (let value of filteredTextValues) {
+        if (value) {
+          let valueSlice = value.slice(0, sliceLen);
+          if (collator.compare(inputValue, valueSlice) === 0) {
+            match = value;
+            break;
+          }
+        }
+      }
+    }
+    return match;
+  }, [collator, filteredTextValues, inputValue]);
+
   return {
     ...triggerState,
     open,
@@ -198,7 +220,8 @@ export function useComboBoxState<T extends object>(props: ComboBoxStateProps<T>)
     collection: filteredCollection,
     isOpen: triggerState.isOpen && isFocused && filteredCollection.size > 0,
     inputValue,
-    setInputValue
+    setInputValue,
+    suggestedValue
   };
 }
 

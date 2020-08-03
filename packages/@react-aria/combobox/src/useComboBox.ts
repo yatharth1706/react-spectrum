@@ -101,6 +101,11 @@ export function useComboBox<T>(props: AriaComboBoxProps<T>, state: ComboBoxState
       case 'ArrowUp':
         state.open('last');
         break;
+      case 'Tab':
+        if (completionMode === 'complete' && state.suggestedValue) {
+          e.preventDefault();
+          state.setInputValue(state.suggestedValue);
+        }
     }
   };
 

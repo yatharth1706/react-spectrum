@@ -57,7 +57,7 @@ function ComboBox<T extends object>(props: SpectrumComboBoxProps<T>, ref: RefObj
   let triggerRef = useRef<FocusableRefValue<HTMLElement>>();
   let listboxRef = useRef();
   let inputRef = useRef<HTMLInputElement & HTMLTextAreaElement>();
-  let collator = useCollator({sensitivity: 'base'});
+  let collator = useCollator({sensitivity: 'variant'});
   let state = useComboBoxState({...props, collator});
   let layout = useListBoxLayout(state);
   let {triggerProps, inputProps, listBoxProps, labelProps} = useComboBox(
@@ -208,6 +208,17 @@ function ComboBox<T extends object>(props: SpectrumComboBoxProps<T>, ref: RefObj
           validationState={validationState}>
           <ChevronDownMedium UNSAFE_className={classNames(styles, 'spectrum-Dropdown-chevron')} />
         </FieldButton>
+        {completionMode === 'complete' &&
+          <div
+            style={{
+              position: 'absolute',
+              top: '5px',
+              'padding-inline-start': '12px',
+              'opacity': '.4'
+            }}>
+              {state.suggestedValue}
+          </div>
+        }
         {overlay}
       </div>
     </FocusRing>

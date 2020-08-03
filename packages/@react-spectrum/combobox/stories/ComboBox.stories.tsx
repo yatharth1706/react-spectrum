@@ -257,6 +257,10 @@ storiesOf('ComboBox', module)
     () => (
       <CustomFilterComboBox selectedKey="2" />
     )
+  )
+  .add(
+    'completionMode: complete',
+    () => render({completionMode: 'complete'})
   );
 
 let customFilterItems = [
