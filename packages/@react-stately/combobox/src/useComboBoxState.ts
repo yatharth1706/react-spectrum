@@ -186,7 +186,9 @@ export function useComboBoxState<T extends object>(props: ComboBoxStateProps<T>)
       triggerState.open(focusStrategy);
     }
   };
-
+  // TODO: need to adjust the below to work for sections, currently only works for section less comboboxes
+  // Alternative is to change it so the filter applied to the collection because space sensitive (but only in completionMode: complete) so that
+  // the first focused item is always gonna be a autocomplete match, meaning we don't need filteredTextValues anymore, just the first "if statement" but
   let filteredTextValues = useMemo(() => [...filteredCollection].map(item => item.textValue), [filteredCollection]);
   let suggestedValue = useMemo(() => {
     let match;
