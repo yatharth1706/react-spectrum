@@ -50,7 +50,8 @@ export function useComboBoxState<T extends object>(props: ComboBoxStateProps<T>)
   let {
     onFilter,
     collator,
-    onSelectionChange
+    onSelectionChange,
+    allowsCustomValue
   } = props;
 
   let [isFocused, setFocused] = useState(false);
@@ -190,22 +191,35 @@ export function useComboBoxState<T extends object>(props: ComboBoxStateProps<T>)
   let suggestedValue = useMemo(() => {
     let match;
 
-    if (inputValue.length > 0) {
+    if (inputValue.length > 0 && !allowsCustomValue) {
       // Should the suggestion be case sensitive?
       let sliceLen = inputValue.length;
+      let focusedKey = selectionManager.focusedKey
+      if (focusedKey) {
+        let focusedText = filteredCollection.getItem(focusedKey).textValue;
+        let valueSlice = focusedText.slice(0, sliceLen);
+        if (collator.compare(inputValue, valueSlice) === 0) {
+          match = focusedText;
+        }
+      }
 
-      for (let value of filteredTextValues) {
-        if (value) {
-          let valueSlice = value.slice(0, sliceLen);
-          if (collator.compare(inputValue, valueSlice) === 0) {
-            match = value;
-            break;
+      // If focusedKey doesn't exist or it doesn't match as a valid autocomplete for the current input text
+      // go through the rest of the values to check if there are any other matches
+      // e.g. input value = ItemO, menu values are "Item One" (focused cuz first in list) and "ItemOne" (this one is a match for autocomplete)
+      if (!match) {
+        for (let value of filteredTextValues) {
+          if (value) {
+            let valueSlice = value.slice(0, sliceLen);
+            if (collator.compare(inputValue, valueSlice) === 0) {
+              match = value;
+              break;
+            }
           }
         }
       }
     }
     return match;
-  }, [collator, filteredTextValues, inputValue]);
+  }, [collator, filteredTextValues, inputValue, selectionManager.focusedKey]);
 
   return {
     ...triggerState,

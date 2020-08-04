@@ -261,7 +261,65 @@ storiesOf('ComboBox', module)
   .add(
     'completionMode: complete',
     () => render({completionMode: 'complete'})
-  );
+  )
+  .add(
+    'completionMode: complete, allowsCustomValue',
+    () => render({completionMode: 'complete', allowsCustomValue: true})
+  )
+  .add(
+    'completionMode: complete, menutrigger: manual',
+    () => render({completionMode: 'complete', menuTrigger: 'manual'})
+  )
+  .add(
+    'completionMode: complete, menutrigger: focus',
+    () => render({completionMode: 'complete', menuTrigger: 'focus'})
+  )
+  .add(
+    'completionMode: complete, menutrigger: manual',
+    () => render({completionMode: 'complete', menuTrigger: 'manual'})
+  )
+  .add(
+    'completionMode: complete, inputValue (controlled)',
+    () => (
+      <ControlledValueComboBox completionMode="complete" inputValue="Test" />
+    )
+  )
+  .add(
+    'completionMode: complete, defaultInputValue (uncontrolled)',
+    () => render({defaultInputValue: 'Item', completionMode: 'complete'})
+  )
+  .add(
+    'completionMode: complete, selectedKey (controlled)',
+    () => (
+      <ControlledKeyComboBox selectedKey="4" completionMode="complete" />
+    )
+  )
+  .add(
+    'completionMode: complete, defaultSelectedKey (uncontrolled)',
+    () => render({defaultSelectedKey: 'two', completionMode: 'complete'})
+  )
+  .add(
+    'completionMode: complete, inputValue and selectedKey (controlled)',
+    () => (
+      <AllControlledComboBox selectedKey="2" inputValue="Kangaroo" completionMode="complete" />
+    )
+  )
+  .add(
+    'completionMode: complete, defaultInputValue and defaultSelectedKey (uncontrolled)',
+    () => render({defaultInputValue: 'Item Two', defaultSelectedKey: 'two', completionMode: 'complete'})
+  )
+  .add(
+    'completionMode: complete, inputValue and defaultSelectedKey (controlled by inputvalue)',
+    () => (
+      <ControlledValueComboBox inputValue="K" defaultSelectedKey="2" completionMode="complete" />
+    )
+  )
+  .add(
+    'completionMode: complete, defaultInputValue and selectedKey (controlled by selectedKey)',
+    () => (
+      <ControlledKeyComboBox defaultInputValue="Blah" selectedKey="2" completionMode="complete" />
+    )
+  )
 
 let customFilterItems = [
   {name: 'The first item', id: '1'},
@@ -415,6 +473,7 @@ function render(props = {}) {
         <Text>Item Two</Text>
       </Item>
       <Item key="three">Item Three</Item>
+      <Item key="four">ItemOne</Item>
     </ComboBox>
   );
 }

@@ -49,7 +49,8 @@ function ComboBox<T extends object>(props: SpectrumComboBoxProps<T>, ref: RefObj
     autoFocus,
     shouldFlip = true,
     width,
-    direction = 'bottom'
+    direction = 'bottom',
+    allowsCustomValue
   } = props;
 
   let {styleProps} = useStyleProps(props);
@@ -90,7 +91,7 @@ function ComboBox<T extends object>(props: SpectrumComboBoxProps<T>, ref: RefObj
   // If allowsCustomValue is false, autofocus first item/selectedItem
   if (state.focusStrategy) {
     comboBoxAutoFocus = state.focusStrategy;
-  } else if (props.allowsCustomValue) {
+  } else if (allowsCustomValue) {
     if (state.selectedKey) {
       comboBoxAutoFocus = true;
     }
@@ -208,7 +209,7 @@ function ComboBox<T extends object>(props: SpectrumComboBoxProps<T>, ref: RefObj
           validationState={validationState}>
           <ChevronDownMedium UNSAFE_className={classNames(styles, 'spectrum-Dropdown-chevron')} />
         </FieldButton>
-        {completionMode === 'complete' &&
+        {completionMode === 'complete' && !allowsCustomValue &&
           <div
             style={{
               position: 'absolute',
