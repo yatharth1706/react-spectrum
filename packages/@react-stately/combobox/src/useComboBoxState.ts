@@ -194,11 +194,12 @@ export function useComboBoxState<T extends object>(props: ComboBoxStateProps<T>)
     if (inputValue.length > 0 && !allowsCustomValue) {
       // Should the suggestion be case sensitive?
       let sliceLen = inputValue.length;
-      let focusedKey = selectionManager.focusedKey
+      let focusedKey = selectionManager.focusedKey;
+
       if (focusedKey) {
-        let focusedText = filteredCollection.getItem(focusedKey).textValue;
-        let valueSlice = focusedText.slice(0, sliceLen);
-        if (collator.compare(inputValue, valueSlice) === 0) {
+        let focusedText = filteredCollection.getItem(focusedKey)?.textValue;
+        let valueSlice = focusedText?.slice(0, sliceLen);
+        if (valueSlice && collator.compare(inputValue, valueSlice) === 0) {
           match = focusedText;
         }
       }
